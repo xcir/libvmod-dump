@@ -55,7 +55,7 @@ Example
                 
                 //Output sample.( curl -F 'file=@README.rst' http://localhost:6081/ )
                 //# varnishlog -graw -qdebug:DUMP
-                //     32788 Debug          c "DUMP: test"
+                //     32788 Debug          c "DUMP: dump error request."
                 //     32788 Debug          c "DUMP: POST%0d%0a"
                 //     32788 Debug          c "DUMP: /%0d%0a"
                 //     32788 Debug          c "DUMP: HTTP/1.1%0d%0a"
