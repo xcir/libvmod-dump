@@ -1,0 +1,22 @@
+varnishtest "Test dump vmod"
+
+server s1 {
+       rxreq
+       txresp
+} -start
+
+varnish v1 -vcl+backend {
+	import dump from "${vmod_topbuild}/src/.libs/libvmod_dump.so";
+
+	sub vcl_deliver {
+		set resp.http.hello = dump.hello("World");
+	}
+} -start
+
+client c1 {
+	txreq -url "/"
+	rxresp
+	expect resp.http.hello == "Hello, World"
+}
+
+client c1 -run
