@@ -1,10 +1,10 @@
 #
-# Copyright YOU (c) 1900.
+# Copyright (c) 2015 Shohei Tanaka(@xcir)
 #
 # (vmodtool requires this format.)
 #
 
-$Module dump 3 Example VMOD
+$Module dump 3 Dump the header and body
 
 DESCRIPTION
 ===========
@@ -21,7 +21,7 @@ You can even have links and lists in here:
 The init-function declared next does not have documentation.
 
 $Event init_function
-$Function VOID req(STRING)
+$Function VOID req(STRING val="")
 
 The different functions provided by the VMOD should also have their own
 embedded documentation. This section is for the hello() function.

@@ -7,6 +7,9 @@
 
 #include "vcc_if.h"
 
+#define VMOD_DUMP_KEY      "VMOD-DUMP: "
+#define VMOD_DUMP_KEY_LEN  11
+
 int
 init_function(const struct vrt_ctx *ctx, struct vmod_priv *priv,
     enum vcl_event_e e)
@@ -27,7 +30,7 @@ void dump_VSL_split(struct req *req, char *p, char *p2, unsigned mlen2, const vo
 	do{
 		if(mlen2 > length){
 			memcpy(p2, c_ptr, length);
-			t.e = t.b + length + 6;
+			t.e = t.b + length + VMOD_DUMP_KEY_LEN;
 			if(br){
 				memcpy(p2 + length, "\r\n", 2);
 				t.e += 2;
@@ -36,7 +39,7 @@ void dump_VSL_split(struct req *req, char *p, char *p2, unsigned mlen2, const vo
 			break;
 		}
 		memcpy(p2, c_ptr, mlen2);
-		t.e = t.b + mlen2 + 6;
+		t.e = t.b + mlen2 + VMOD_DUMP_KEY_LEN;
 		if(br){
 			memcpy(p2 + mlen2, "\r\n", 2);
 			t.e += 2;
@@ -47,14 +50,15 @@ void dump_VSL_split(struct req *req, char *p, char *p2, unsigned mlen2, const vo
 		
 	}while(1);
 }
+
 static int __match_proto__(req_body_iter_f)
 vbf_printRequestBody(struct req *req, void *priv, void *ptr, size_t l)
 {
     CHECK_OBJ_NOTNULL(req, REQ_MAGIC);
-	unsigned mlen,mlen2;
+	unsigned mlen, mlen2;
 	unsigned u;
-	char *p,*p2;
-	mlen = cache_param->vsl_reclen -3;
+	char *p, *p2;
+	mlen = cache_param->vsl_reclen - 3;
 	u = WS_Reserve(req->ws, 0);
 	if(u < mlen) {
 		//no space.
@@ -62,10 +66,10 @@ vbf_printRequestBody(struct req *req, void *priv, void *ptr, size_t l)
 		return (0);
 	}
 	p = req->ws->f;
-	strcpy(p,"DUMP: ");
+	strcpy(p, VMOD_DUMP_KEY);
 	
-	p2 = p + 6;
-	mlen2 = mlen - 6;
+	p2 = p + VMOD_DUMP_KEY_LEN;
+	mlen2 = mlen - VMOD_DUMP_KEY_LEN;
 	dump_VSL_split(req,p,p2,mlen2,priv,strlen(priv),0);
 	
 	//header output

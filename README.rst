@@ -54,19 +54,19 @@ Example
                 }
                 
                 //Output sample.( curl -F 'file=@README.rst' http://localhost:6081/ )
-                //# varnishlog -graw -qdebug:DUMP
-                //     32788 Debug          c "DUMP: dump error request."
-                //     32788 Debug          c "DUMP: POST%0d%0a"
-                //     32788 Debug          c "DUMP: /%0d%0a"
-                //     32788 Debug          c "DUMP: HTTP/1.1%0d%0a"
-                //     32788 Debug          c "DUMP: User-Agent: curl/7.35.0%0d%0a"
-                //     32788 Debug          c "DUMP: Host: localhost:6081%0d%0a"
-                //     32788 Debug          c "DUMP: Accept: */*%0d%0a"
-                //     32788 Debug          c "DUMP: Content-Length: 3200%0d%0a"
-                //     32788 Debug          c "DUMP: Content-Type: multipart/form-data; boundary=------------------------03d94756ba140cd1%0d%0a"
-                //     32788 Debug          c "DUMP: %0d%0a"
-                //     32788 Debug          c "DUMP: --------------------------03d94756ba140cd1%0d%0aContent-Disposition: form-data; name="file"; filename="README.rst"%0d%0aContent-Type: application/octet-stream%0d%0a%0d%0a============%0avmod_dump%0a============%0a%0a------------------------------------%0aDump the request h"
-                //     32788 Debug          c "DUMP: eader with body%0a------------------------------------%0a%0a:Author: Shohei Tanaka(@xcir)%0a:Date: 2015-12-11%0a:Version: develop-varnish41%0a:Support Varnish Version: 4.1.x%0a:Manual section: 3%0a%0aSYNOPSIS%0a========%0a%0aimport dump;%0a%0aDESCRIPTION%0a===========%0a%0aExampl"
+                //# varnishlog -graw -qdebug:VMOD-DUMP
+                //     32788 Debug          c "VMOD-DUMP: dump error request."
+                //     32788 Debug          c "VMOD-DUMP: POST%0d%0a"
+                //     32788 Debug          c "VMOD-DUMP: /%0d%0a"
+                //     32788 Debug          c "VMOD-DUMP: HTTP/1.1%0d%0a"
+                //     32788 Debug          c "VMOD-DUMP: User-Agent: curl/7.35.0%0d%0a"
+                //     32788 Debug          c "VMOD-DUMP: Host: localhost:6081%0d%0a"
+                //     32788 Debug          c "VMOD-DUMP: Accept: */*%0d%0a"
+                //     32788 Debug          c "VMOD-DUMP: Content-Length: 3200%0d%0a"
+                //     32788 Debug          c "VMOD-DUMP: Content-Type: multipart/form-data; boundary=------------------------03d94756ba140cd1%0d%0a"
+                //     32788 Debug          c "VMOD-DUMP: %0d%0a"
+                //     32788 Debug          c "VMOD-DUMP: --------------------------03d94756ba140cd1%0d%0aContent-Disposition: form-data; name="file"; filename="README.rst"%0d%0aContent-Type: application/octet-stream%0d%0a%0d%0a============%0avmod_dump%0a============%0a%0a------------------------------------%0aDump the request h"
+                //     32788 Debug          c "VMOD-DUMP: eader with body%0a------------------------------------%0a%0a:Author: Shohei Tanaka(@xcir)%0a:Date: 2015-12-11%0a:Version: develop-varnish41%0a:Support Varnish Version: 4.1.x%0a:Manual section: 3%0a%0aSYNOPSIS%0a========%0a%0aimport dump;%0a%0aDESCRIPTION%0a===========%0a%0aExampl"
                 //...
 
                 
