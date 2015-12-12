@@ -70,11 +70,6 @@ int work_head(struct req *req, char *p,unsigned plen,  void *ptr, size_t l, stru
 	//add prefix
 	strcpy(p, VMOD_DUMP_KEY);
 	
-	//valここでおちてるのでNULLチェック
-//		if(priv){
-//			dump_VSL_split(req, p, mlen, priv, strlen(priv), 0);
-//		}
-	
 	//header
 	for(int i=0; i < http->nhd; ++i) {
 		if (http->hd[i].b == NULL && http->hd[i].e == NULL)	continue;
@@ -101,7 +96,7 @@ int work_body(struct req *req, char *p,unsigned plen, void *ptr, size_t l, struc
 	
 	//body
 	if (l > 0){
-		dump_VSL_split(req, p,  mlen, ptr, l, 0);
+		dump_VSL_split(req, p, mlen, ptr, l, 0);
     }
     return (0);
 
@@ -116,7 +111,7 @@ vbf_printRequestBody(struct req *req, void *priv, void *ptr, size_t l)
 	if(u <= VMOD_DUMP_KEY_LEN) {
 		//no space.
 		WS_Release(req->ws, 0);
-		return (0);		
+		return (0);
 	}
 	work_head(req,req->ws->f, u, ptr, l, req->http0);
 	work_body(req,req->ws->f, u, ptr, l, req->http0);
@@ -163,6 +158,6 @@ VDP_dump(struct req *req, enum vdp_action act, void **priv,
 VCL_VOID
 vmod_resp(VRT_CTX, VCL_STRING val)
 {
-	VDP_push(ctx->req, VDP_dump, (void*)val, 0);
+	VDP_push(ctx->req, VDP_dump, (void*)val, 1);
 }
 
