@@ -1,6 +1,6 @@
 #!/usr/bin/python
-
 # coding: utf-8
+
 import varnishapi,time,os,sys,syslog,traceback
 
 
@@ -25,11 +25,21 @@ class SampleVarnishLog:
 		length      = cbd['length']
 		t_tag = vap.VSL_tags[tag]
 		var   = vap.vut.tag2VarName(t_tag,data)
-		print data[6:length-1],
+		if data[:8] == "VMD-DUMP":
+			if data[:10] == "VMD-DUMP-S" or data[:10] == "VMD-DUMP-V":
+				print ">"*10,
+				print data[12:length-1]
+			else:
+				print data[10:length-1],
 
 def main(smp):
 	try:
-		vap = varnishapi.VarnishLog(['-g','raw','-q','Debug:DUMP'])
+		# 後でIPとポート関連も仕込んどく(PROXYpor関連
+		vap = varnishapi.VarnishLog([
+			'-g', 'request',
+			'-q', 'Debug:VMD-DUMP',
+			'-i', 'Debug'
+			])
 		if vap.error:
 			print vap.error
 			exit(1)

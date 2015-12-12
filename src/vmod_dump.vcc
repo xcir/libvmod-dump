@@ -15,13 +15,14 @@ mention what the vmod is intended to do.
 It can span multiple lines and is written in RST format.
 You can even have links and lists in here:
 
-* https://github.com/varnish/libvmod-dump/
-* https://www.varnish-cache.org/
+* https://github.com/xcir/libvmod-dump/
 
 The init-function declared next does not have documentation.
 
 $Event init_function
 $Function VOID req(STRING val="")
+
+$Function VOID resp(STRING val="")
 
 The different functions provided by the VMOD should also have their own
 embedded documentation. This section is for the hello() function.
