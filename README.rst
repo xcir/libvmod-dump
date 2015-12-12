@@ -33,7 +33,7 @@ req
 Prototype
         ::
 
-                req(STRING val)
+                VOID req(STRING val)
 Return value
 	VOID
 Description
@@ -93,7 +93,7 @@ resp
 Prototype
         ::
 
-                resp(STRING val)
+                VOID resp(STRING val)
 Return value
 	VOID
 Description
