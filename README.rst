@@ -87,6 +87,12 @@ Example
                 //         8 Debug          c "VMD-DUMP: sh Cache versions%0a%0a  Make sure you build this vmod against its correspondent Varnish Cache version.%0a  For dump, to build against Varnish Cache 4.0, this vmod must be built from branch 4.0.%0a%0d%0a--------------------------73e9dc077f7314be"
                 //         8 Debug          c "VMD-DUMP: --%0d%0a"
 
+resp
+-----
+
+Prototype
+        ::
+
                 resp(STRING val)
 Return value
 	VOID
