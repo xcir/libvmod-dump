@@ -56,7 +56,7 @@ void dump_VSL_split(struct req *req, char *p, unsigned mlen, const void *ptr, si
 	}while(1);
 }
 
-int work_head(struct req *req, char *p,unsigned plen,  void *ptr, size_t l, struct http *http)
+int work_head(struct req *req, char *p,unsigned plen, struct http *http)
 {
 	CHECK_OBJ_NOTNULL(req, REQ_MAGIC);
 	unsigned mlen;
@@ -113,7 +113,6 @@ vbf_printRequestBody(struct req *req, void *priv, void *ptr, size_t l)
 		WS_Release(req->ws, 0);
 		return (0);
 	}
-	work_head(req,req->ws->f, u, ptr, l, req->http0);
 	work_body(req,req->ws->f, u, ptr, l, req->http0);
 	
 	//free work-space
@@ -126,6 +125,18 @@ vmod_req(VRT_CTX, VCL_STRING val)
 {
 	VSLb(ctx->req->vsl, SLT_Debug,"%s-S: REQ", VMOD_DUMP_PRE);
 	VSLb(ctx->req->vsl, SLT_Debug,"%s-V: %s", VMOD_DUMP_PRE, val);
+	unsigned u;
+	//reserve work-space
+	u = WS_Reserve(ctx->req->ws, 0);
+	if(u <= VMOD_DUMP_KEY_LEN) {
+		//no space.
+		WS_Release(ctx->req->ws, 0);
+		return;
+	}
+	work_head(ctx->req,ctx->req->ws->f, u, ctx->req->http0);
+	//free work-space
+	WS_Release(ctx->req->ws, 0);
+	
 	VRB_Iterate(ctx->req, vbf_printRequestBody, NULL);
 	VSLb(ctx->req->vsl, SLT_Debug,"%s-S: END", VMOD_DUMP_PRE);
 }
@@ -141,7 +152,7 @@ VDP_dump(struct req *req, enum vdp_action act, void **priv,
 		VSLb(req->vsl, SLT_Debug,"%s-V: %s", VMOD_DUMP_PRE, (char *)*priv);
 		*priv = malloc(cache_param->vsl_reclen);
 		AN(*priv);
-		work_head(req, *priv, cache_param->vsl_reclen,  (void*)ptr, len, req->resp);
+		work_head(req, *priv, cache_param->vsl_reclen,  req->resp);
 		return(0);
 	}else if(act == VDP_FINI){
 		VSLb(req->vsl, SLT_Debug,"%s-S: END", VMOD_DUMP_PRE);
