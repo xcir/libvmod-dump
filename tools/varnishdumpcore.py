@@ -1,13 +1,43 @@
-#!/usr/bin/python
 # coding: utf-8
 
 import varnishapi,time,os,sys,syslog,traceback
 
 
-class SampleVarnishLog:
-	def execute(self,vap):
+class varnishDump:
+	def __init__(self, opts):
+		self.logdir   = os.path.dirname(__file__).rstrip('/') + '/'
+		self.outproxy = 0
+		self.buf      = {}
+		vops = [
+			'-g', 'request',
+			'-q', 'Debug:VMD-DUMP',
+			'-i', 'Debug'
+		]
+		arg = {}
+		for o,a in opts:
+			if   o == '-o':
+				if not os.path.isdir(a):
+					print "%s does not exist" % (a)
+					exit(1)
+				if not os.access(a, os.R_OK or os.W_OK):
+					print "%s permission denied" % (a)
+					exit(1)
+					
+			elif o == '-p':
+				self.outproxy = 1
+			elif o == '--sopath':
+				arg["sopath"] = a
+			elif o == '-n':
+					vops += ['-n', a]
+		
+		arg["opt"]   = vops
+		self.vap     = varnishapi.VarnishLog(**arg)
+		if self.vap.error:
+			print self.vap.error
+			exit(1)
+
+	def execute(self):
 		#connect varnishapi
-		self.vap     = vap
 		while 1:
 			ret = self.vap.Dispatch(self.vapCallBack)
 			if 0 == ret:
@@ -26,12 +56,17 @@ class SampleVarnishLog:
 		t_tag = vap.VSL_tags[tag]
 		var   = vap.vut.tag2VarName(t_tag,data)
 		if data[:8] == "VMD-DUMP":
-			if data[:10] == "VMD-DUMP-S" or data[:10] == "VMD-DUMP-V":
+			if   data[:10] == "VMD-DUMP-S":
+				print ">"*10,
+				print data[12:length-1]
+			elif data[:10] == "VMD-DUMP-V":
+				
 				print ">"*10,
 				print data[12:length-1]
 			else:
 				print data[10:length-1],
-
+		
+'''
 def main(smp):
 	try:
 		# 後でIPとポート関連も仕込んどく(PROXYpor関連
@@ -53,5 +88,5 @@ def main(smp):
 if __name__ == '__main__':
 	smp = SampleVarnishLog()
 	main(smp)
+'''  
 
-	    
