@@ -46,13 +46,14 @@ class varnishDump:
 	def prnData(self,vxid):
 		d = self.buf[vxid]
 		tf = "%s_%d" % (d['time'], vxid)
-		print self.buf[vxid]
 		for v in ['req','resp']:
 			if d[v]['raw']:
 				fname = "%s%s_%s.dump" % (self.logdir , tf , v)
 				f = open(fname, 'w')
 				f.write(d[v]['raw'])
 				f.close()
+				print d[v]['raw'][:d[v]['raw'].find("\n")].rstrip()
+				print "vxid:%d type:%s time:%s file:%s" % (vxid, v, d['time'], fname)
 	
 	def vapCallBack(self,vap,cbd,priv):
 		level       = cbd['level']
