@@ -12,6 +12,16 @@
 #define VMOD_DUMP_KEY      "VMD-DUMP: "
 #define VMOD_DUMP_KEY_LEN  10
 
+//from varnishd/cache_http1_proto.c
+const int HTTP1_Req[3] = {
+	HTTP_HDR_METHOD, HTTP_HDR_URL, HTTP_HDR_PROTO
+};
+
+const int HTTP1_Resp[3] = {
+	HTTP_HDR_PROTO, HTTP_HDR_STATUS, HTTP_HDR_REASON
+};
+
+
 int
 init_function(const struct vrt_ctx *ctx, struct vmod_priv *priv,
     enum vcl_event_e e)
@@ -23,7 +33,7 @@ init_function(const struct vrt_ctx *ctx, struct vmod_priv *priv,
 	return (0);
 }
 
-void dump_VSL_split(struct req *req, char *p, unsigned mlen, const void *ptr, size_t l, unsigned br){
+void dump_VSL_split(struct req *req, char *p, unsigned mlen, const void *ptr, size_t l, char * suf){
 	
 	char *p2       = p + VMOD_DUMP_KEY_LEN;
 	unsigned mlen2 = mlen - VMOD_DUMP_KEY_LEN;
@@ -31,23 +41,24 @@ void dump_VSL_split(struct req *req, char *p, unsigned mlen, const void *ptr, si
 	void *c_ptr    = (void*)ptr;
 	txt t;
 	t.b = p;
-	
+	unsigned slen = strlen(suf);
+	assert(slen <= 2);
 	do{
 		if(mlen2 > length){
 			memcpy(p2, c_ptr, length);
 			t.e = t.b + length + VMOD_DUMP_KEY_LEN;
-			if(br) {
-				memcpy(p2 + length, "\r\n", 2);
-				t.e += 2;
+			if(slen > 0) {
+				memcpy(p2 + length, suf, slen);
+				t.e += slen;
 			}
 			VSLbt(req->vsl, SLT_Debug,t);
 			break;
 		}
 		memcpy(p2, c_ptr, mlen2);
 		t.e = t.b + mlen2 + VMOD_DUMP_KEY_LEN;
-		if(br) {
-			memcpy(p2 + mlen2, "\r\n", 2);
-			t.e += 2;
+		if(slen > 0) {
+			memcpy(p2 + mlen2, suf, slen);
+			t.e += slen;
 		}
 		VSLbt(req->vsl, SLT_Debug,t);
 		c_ptr  += mlen2;
@@ -56,7 +67,7 @@ void dump_VSL_split(struct req *req, char *p, unsigned mlen, const void *ptr, si
 	}while(1);
 }
 
-int work_head(struct req *req, char *p,unsigned plen, struct http *http)
+int work_head(struct req *req, char *p,unsigned plen, struct http *http,const int *hf)
 {
 	CHECK_OBJ_NOTNULL(req, REQ_MAGIC);
 	unsigned mlen;
@@ -71,11 +82,18 @@ int work_head(struct req *req, char *p,unsigned plen, struct http *http)
 	strcpy(p, VMOD_DUMP_KEY);
 	
 	//header
-	for(int i=0; i < http->nhd; ++i) {
+	AN(http->hd[hf[0]].b);
+	AN(http->hd[hf[1]].b);
+	AN(http->hd[hf[2]].b);
+	dump_VSL_split(req, p, mlen, http->hd[hf[0]].b, (http->hd[hf[0]].e - http->hd[hf[0]].b), " ");
+	dump_VSL_split(req, p, mlen, http->hd[hf[1]].b, (http->hd[hf[1]].e - http->hd[hf[1]].b), " ");
+	dump_VSL_split(req, p, mlen, http->hd[hf[2]].b, (http->hd[hf[2]].e - http->hd[hf[2]].b), "\r\n");
+	
+	for(int i=HTTP_HDR_FIRST; i < http->nhd; ++i) {
 		if (http->hd[i].b == NULL && http->hd[i].e == NULL)	continue;
-		dump_VSL_split(req, p, mlen, http->hd[i].b, (http->hd[i].e - http->hd[i].b), 1);
+		dump_VSL_split(req, p, mlen, http->hd[i].b, (http->hd[i].e - http->hd[i].b), "\r\n");
 	}
-		dump_VSL_split(req,p,mlen,"\r\n",2,0);
+	dump_VSL_split(req,p,mlen,"\r\n",2,"");
     return (0);
 
 }
@@ -96,7 +114,7 @@ int work_body(struct req *req, char *p,unsigned plen, void *ptr, size_t l, struc
 	
 	//body
 	if (l > 0){
-		dump_VSL_split(req, p, mlen, ptr, l, 0);
+		dump_VSL_split(req, p, mlen, ptr, l, "");
     }
     return (0);
 
@@ -133,7 +151,7 @@ vmod_req(VRT_CTX, VCL_STRING val)
 		WS_Release(ctx->req->ws, 0);
 		return;
 	}
-	work_head(ctx->req,ctx->req->ws->f, u, ctx->req->http0);
+	work_head(ctx->req,ctx->req->ws->f, u, ctx->req->http0,HTTP1_Req);
 	//free work-space
 	WS_Release(ctx->req->ws, 0);
 	
@@ -152,7 +170,7 @@ VDP_dump(struct req *req, enum vdp_action act, void **priv,
 		VSLb(req->vsl, SLT_Debug,"%s-V: %s", VMOD_DUMP_PRE, (char *)*priv);
 		*priv = malloc(cache_param->vsl_reclen);
 		AN(*priv);
-		work_head(req, *priv, cache_param->vsl_reclen,  req->resp);
+		work_head(req, *priv, cache_param->vsl_reclen,  req->resp,HTTP1_Resp);
 		return(0);
 	}else if(act == VDP_FINI){
 		VSLb(req->vsl, SLT_Debug,"%s-S: END", VMOD_DUMP_PRE);
