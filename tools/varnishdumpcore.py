@@ -118,27 +118,3 @@ class varnishDump:
 					self.buf[vxid][self.buf[vxid]['cur']]['raw'] = self.buf[vxid][self.buf[vxid]['cur']]['raw'] + data[10:length-1]
 					
 		
-'''
-def main(smp):
-	try:
-		# 後でIPとポート関連も仕込んどく(PROXYpor関連
-		vap = varnishapi.VarnishLog([
-			'-g', 'request',
-			'-q', 'Debug:VMD-DUMP',
-			'-i', 'Debug'
-			])
-		if vap.error:
-			print vap.error
-			exit(1)
-		smp.execute(vap)
-	except KeyboardInterrupt:
-		vap.Fini()
-	except Exception as e:
-		syslog.openlog(sys.argv[0], syslog.LOG_PID|syslog.LOG_PERROR, syslog.LOG_LOCAL0)
-		syslog.syslog(syslog.LOG_ERR, traceback.format_exc())
-
-if __name__ == '__main__':
-	smp = SampleVarnishLog()
-	main(smp)
-'''  
-
