@@ -145,7 +145,6 @@ vmod_req(VRT_CTX, VCL_STRING val)
 	//VRT_r_server_ip
 	//VRT_IP_string(IP) ip->str
 	//VSA_Port(IP) ip->port
-	VSLb(ctx->vsl, SLT_Debug,"%s-S: REQ", VMOD_DUMP_PRE);
 	VSLb(ctx->vsl, SLT_Debug,"%s-I: %s %d %s %d %s %d %s %d", VMOD_DUMP_PRE,
 		VRT_IP_string(ctx, VRT_r_remote_ip(ctx)),
 		VSA_Port(VRT_r_remote_ip(ctx)),
@@ -156,6 +155,7 @@ vmod_req(VRT_CTX, VCL_STRING val)
 		VRT_IP_string(ctx, VRT_r_server_ip(ctx)),
 		VSA_Port(VRT_r_server_ip(ctx))
 	);
+	VSLb(ctx->vsl, SLT_Debug,"%s-S: REQ", VMOD_DUMP_PRE);
 	VSLb(ctx->vsl, SLT_Debug,"%s-V: %s", VMOD_DUMP_PRE, val);
 	unsigned u;
 	//reserve work-space
@@ -205,6 +205,16 @@ vmod_resp(VRT_CTX, VCL_STRING val)
 		return;
 	}
 	
+	VSLb(ctx->vsl, SLT_Debug,"%s-I: %s %d %s %d %s %d %s %d", VMOD_DUMP_PRE,
+		VRT_IP_string(ctx, VRT_r_remote_ip(ctx)),
+		VSA_Port(VRT_r_remote_ip(ctx)),
+		VRT_IP_string(ctx, VRT_r_client_ip(ctx)),
+		VSA_Port(VRT_r_client_ip(ctx)),
+		VRT_IP_string(ctx, VRT_r_local_ip(ctx)),
+		VSA_Port(VRT_r_local_ip(ctx)),
+		VRT_IP_string(ctx, VRT_r_server_ip(ctx)),
+		VSA_Port(VRT_r_server_ip(ctx))
+	);
 	VDP_push(ctx->req, VDP_dump, (void*)val, 1);
 }
 
