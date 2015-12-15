@@ -122,76 +122,76 @@ Description
 OPTION
         ::
 
-          -p -o [logdir] --sopath [libvarnishapi.so] -D -n [instance-name] -P [pid-file] -V
+         -p -o [logdir] --sopath [libvarnishapi.so] -D -n [instance-name] -P [pid-file] -V
 
 Example(dump.req("hogehoge"))
         ::
 
-        xcir@varnish41-1:~/ex/libvmod-dump/tools$ sudo ./varnishdump.py
-        vxid:32788 type:req time:20151215-164353 file:/home/xcir/ex/libvmod-dump/tools/log/20151215-164353_32788_req.dump val:hogehoge 1stline:POST / HTTP/1.1
-        ^Cxcir@varnish41-1:~/ex/libvmod-dump/tools$ cat /home/xcir/ex/libvmod-dump/tools/log/20151215-164353_32788_req.dump
-        POST / HTTP/1.1
-        User-Agent: curl/7.35.0
-        Host: localhost:6081
-        Accept: */*
-        Content-Length: 1419
-        Content-Type: multipart/form-data; boundary=------------------------c72d24d105d8f2d7
-        
-        --------------------------c72d24d105d8f2d7
-        Content-Disposition: form-data; name="file"; filename="LICENSE"
-        Content-Type: application/octet-stream
-        
-        Redistribution and use in source and binary forms, with or without
-        modification, are permitted provided that the following conditions
-        are met:
-        1. Redistributions of source code must retain the above copyright
-           notice, this list of conditions and the following disclaimer.
-        2. Redistributions in binary form must reproduce the above copyright
-           notice, this list of conditions and the following disclaimer in the
-           documentation and/or other materials provided with the distribution.
-        
-        THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
-        ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-        ARE DISCLAIMED.  IN NO EVENT SHALL AUTHOR OR CONTRIBUTORS BE LIABLE
-        FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-        DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-        OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-        HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-        LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-        OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-        SUCH DAMAGE.
-        --------------------------c72d24d105d8f2d7--
+         xcir@varnish41-1:~/ex/libvmod-dump/tools$ sudo ./varnishdump.py
+         vxid:32788 type:req time:20151215-164353 file:/home/xcir/ex/libvmod-dump/tools/log/20151215-164353_32788_req.dump val:hogehoge 1stline:POST / HTTP/1.1
+         ^Cxcir@varnish41-1:~/ex/libvmod-dump/tools$ cat /home/xcir/ex/libvmod-dump/tools/log/20151215-164353_32788_req.dump
+         POST / HTTP/1.1
+         User-Agent: curl/7.35.0
+         Host: localhost:6081
+         Accept: */*
+         Content-Length: 1419
+         Content-Type: multipart/form-data; boundary=------------------------c72d24d105d8f2d7
+         
+         --------------------------c72d24d105d8f2d7
+         Content-Disposition: form-data; name="file"; filename="LICENSE"
+         Content-Type: application/octet-stream
+         
+         Redistribution and use in source and binary forms, with or without
+         modification, are permitted provided that the following conditions
+         are met:
+         1. Redistributions of source code must retain the above copyright
+            notice, this list of conditions and the following disclaimer.
+         2. Redistributions in binary form must reproduce the above copyright
+            notice, this list of conditions and the following disclaimer in the
+            documentation and/or other materials provided with the distribution.
+         
+         THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+         ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+         IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+         ARE DISCLAIMED.  IN NO EVENT SHALL AUTHOR OR CONTRIBUTORS BE LIABLE
+         FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+         DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+         OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+         HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+         LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+         OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+         SUCH DAMAGE.
+         --------------------------c72d24d105d8f2d7--
 
 Example(dump.resp("magemage"))
         ::
 
-        xcir@varnish41-1:~/ex/libvmod-dump/tools$ sudo ./varnishdump.py
-        vxid:32788 type:resp time:20151215-164353 file:/home/xcir/ex/libvmod-dump/tools/log/20151215-164353_32788_resp.dump val:magemage 1stline:HTTP/1.1 503 Backend fetch failed
-        ^Cxcir@varnish41-1:~/ex/libvmod-dump/tools$ cat /home/xcir/ex/libvmod-dump/tools/log/20151215-164353_32788_resp.dump
-        HTTP/1.1 503 Backend fetch failed
-        Date: Tue, 15 Dec 2015 07:43:53 GMT
-        Server: Varnish
-        Content-Type: text/html; charset=utf-8
-        Retry-After: 5
-        X-Varnish: 32788
-        Age: 0
-        Via: 1.1 varnish-v4
-        
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <title>503 Backend fetch failed</title>
-          </head>
-          <body>
+         xcir@varnish41-1:~/ex/libvmod-dump/tools$ sudo ./varnishdump.py
+         vxid:32788 type:resp time:20151215-164353 file:/home/xcir/ex/libvmod-dump/tools/log/20151215-164353_32788_resp.dump val:magemage 1stline:HTTP/1.1 503 Backend fetch failed
+         ^Cxcir@varnish41-1:~/ex/libvmod-dump/tools$ cat /home/xcir/ex/libvmod-dump/tools/log/20151215-164353_32788_resp.dump
+         HTTP/1.1 503 Backend fetch failed
+         Date: Tue, 15 Dec 2015 07:43:53 GMT
+         Server: Varnish
+         Content-Type: text/html; charset=utf-8
+         Retry-After: 5
+         X-Varnish: 32788
+         Age: 0
+         Via: 1.1 varnish-v4
+         
+         <!DOCTYPE html>
+         <html>
+           <head>
+             <title>503 Backend fetch failed</title>
+           </head>
+           <body>
             <h1>Error 503 Backend fetch failed</h1>
-            <p>Backend fetch failed</p>
-            <h3>Guru Meditation:</h3>
-            <p>XID: 32789</p>
-            <hr>
-            <p>Varnish cache server</p>
-          </body>
-        </html>
+             <p>Backend fetch failed</p>
+             <h3>Guru Meditation:</h3>
+             <p>XID: 32789</p>
+             <hr>
+             <p>Varnish cache server</p>
+           </body>
+         </html>
 
 
 
