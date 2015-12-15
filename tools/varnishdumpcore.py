@@ -7,11 +7,13 @@ class varnishDump:
 	def __init__(self, opts):
 		self.logdir   = os.path.dirname(__file__).rstrip('/') + '/log/'
 		self.outproxy = 0
+		self.daemon   = 0
 		self.buf      = {}
 		vops = [
 			'-g', 'vxid',
+			#'-g', 'session',
 			'-q', 'Debug:VMD-DUMP',
-			'-i', 'Debug,ReqStart,End,Timestamp'
+			'-i', 'Debug,ReqStart,End,Timestamp,SessOpen'
 		]
 		arg = {}
 		for o,a in opts:
@@ -25,6 +27,8 @@ class varnishDump:
 					
 			elif o == '-p':
 				self.outproxy = 1
+			elif o == '-D':
+				self.daemon = 1
 			elif o == '--sopath':
 				arg["sopath"] = a
 			elif o == '-n':
@@ -52,8 +56,8 @@ class varnishDump:
 				f = open(fname, 'w')
 				f.write(d[v]['raw'])
 				f.close()
-				print d[v]['raw'][:d[v]['raw'].find("\n")].rstrip()
-				print "vxid:%d type:%s time:%s file:%s" % (vxid, v, d['time'], fname)
+				if not self.daemon:
+					print "vxid:%d type:%s time:%s file:%s val:%s 1stline:%s" % (vxid, v, d['time'], fname, d[v]['val'], d[v]['raw'][:d[v]['raw'].find("\n")].rstrip())
 	
 	def vapCallBack(self,vap,cbd,priv):
 		level       = cbd['level']
@@ -78,6 +82,12 @@ class varnishDump:
 				}
 			spl   = data[:length-1].split(' ',3)
 			self.buf[vxid]['time'] = time.strftime("%Y%m%d-%H%M%S", datetime.datetime.fromtimestamp(float(spl[1])).timetuple())
+		elif t_tag == 'SessOpen':
+			pass
+		#	#        14 SessOpen       c ::1 37408 :6081 ::1 6081 1450161303.625217 15
+		#	#                            remoteIP  Listen    
+		#	#                                remotePort  localip
+		#	print data[:length-1]
 		elif t_tag == 'ReqStart':
 			spl   = data[:length-1].split(' ')
 			self.buf[vxid]['addr'] = spl[0]
