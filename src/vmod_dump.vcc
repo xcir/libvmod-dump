@@ -19,7 +19,6 @@ You can even have links and lists in here:
 
 The init-function declared next does not have documentation.
 
-$Event init_function
 $Function VOID req(STRING val="")
 
 $Function VOID resp(STRING val="")

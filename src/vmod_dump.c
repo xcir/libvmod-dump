@@ -22,17 +22,6 @@ const int HTTP1_Resp[3] = {
 };
 
 
-int
-init_function(const struct vrt_ctx *ctx, struct vmod_priv *priv,
-    enum vcl_event_e e)
-{
-	if (e != VCL_EVENT_LOAD)
-		return (0);
-
-	/* init what you need */
-	return (0);
-}
-
 void dump_VSL_split(struct req *req, char *p, unsigned mlen, const void *ptr, size_t l, char * suf){
 	
 	char *p2       = p + VMOD_DUMP_KEY_LEN;
@@ -141,8 +130,14 @@ vbf_printRequestBody(struct req *req, void *priv, void *ptr, size_t l)
 VCL_VOID
 vmod_req(VRT_CTX, VCL_STRING val)
 {
-	VSLb(ctx->req->vsl, SLT_Debug,"%s-S: REQ", VMOD_DUMP_PRE);
-	VSLb(ctx->req->vsl, SLT_Debug,"%s-V: %s", VMOD_DUMP_PRE, val);
+	//thread check
+	if(ctx->req == NULL || ctx->req->magic != REQ_MAGIC){
+		VSLb(ctx->vsl, SLT_Error,"vmod-dump: dump.req work only at client-thread.");
+		return;
+	}
+	
+	VSLb(ctx->vsl, SLT_Debug,"%s-S: REQ", VMOD_DUMP_PRE);
+	VSLb(ctx->vsl, SLT_Debug,"%s-V: %s", VMOD_DUMP_PRE, val);
 	unsigned u;
 	//reserve work-space
 	u = WS_Reserve(ctx->req->ws, 0);
@@ -156,10 +151,8 @@ vmod_req(VRT_CTX, VCL_STRING val)
 	WS_Release(ctx->req->ws, 0);
 	
 	VRB_Iterate(ctx->req, vbf_printRequestBody, NULL);
-	VSLb(ctx->req->vsl, SLT_Debug,"%s-S: END", VMOD_DUMP_PRE);
+	VSLb(ctx->vsl, SLT_Debug,"%s-S: END", VMOD_DUMP_PRE);
 }
-
-
 
 int __match_proto__(vdp_bytes)
 VDP_dump(struct req *req, enum vdp_action act, void **priv,
@@ -187,6 +180,12 @@ VDP_dump(struct req *req, enum vdp_action act, void **priv,
 VCL_VOID
 vmod_resp(VRT_CTX, VCL_STRING val)
 {
+	//thread check
+	if(ctx->req == NULL || ctx->req->magic != REQ_MAGIC){
+		VSLb(ctx->vsl, SLT_Error,"vmod-dump: dump.resp work only at client-thread.");
+		return;
+	}
+	
 	VDP_push(ctx->req, VDP_dump, (void*)val, 1);
 }
 
