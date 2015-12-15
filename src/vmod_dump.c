@@ -177,12 +177,14 @@ int __match_proto__(vdp_bytes)
 VDP_dump(struct req *req, enum vdp_action act, void **priv,
     const void *ptr, ssize_t len)
 {
+	//priv fmt
+	// flg(Complete the header output)@1Byte + [workspace]
 	if (act == VDP_INIT){
 		VSLb(req->vsl, SLT_Debug,"%s-S: RES", VMOD_DUMP_PRE);
 		VSLb(req->vsl, SLT_Debug,"%s-V: %s", VMOD_DUMP_PRE, (char *)*priv);
-		*priv = malloc(cache_param->vsl_reclen);
+		*priv = malloc(cache_param->vsl_reclen + 1);
 		AN(*priv);
-		work_head(req, *priv, cache_param->vsl_reclen,  req->resp,HTTP1_Resp);
+		*((char **)priv)[0] = 0;
 		return(0);
 	}else if(act == VDP_FINI){
 		VSLb(req->vsl, SLT_Debug,"%s-S: END", VMOD_DUMP_PRE);
@@ -192,7 +194,11 @@ VDP_dump(struct req *req, enum vdp_action act, void **priv,
 	}
 
 	if(len){
-		work_body(req, *priv, cache_param->vsl_reclen,  (void*)ptr, len, req->resp);
+		if(*((char **)priv)[0] == 0){
+			work_head(req, *priv+1, cache_param->vsl_reclen,  req->resp,HTTP1_Resp);
+			*((char **)priv)[0] = 1;
+		}
+		work_body(req, *priv+1, cache_param->vsl_reclen,  (void*)ptr, len, req->resp);
 	}
 	return(VDP_bytes(req, act, ptr, len)); 
 }
@@ -217,4 +223,3 @@ vmod_resp(VRT_CTX, VCL_STRING val)
 	);
 	VDP_push(ctx->req, VDP_dump, (void*)val, 1);
 }
-
