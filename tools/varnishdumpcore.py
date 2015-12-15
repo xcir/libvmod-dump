@@ -1,6 +1,6 @@
 # coding: utf-8
 
-import varnishapi,time,os,sys,syslog,traceback,datetime
+import varnishapi,time,os,sys,syslog,traceback,datetime,re
 
 
 class varnishDump:
@@ -8,13 +8,14 @@ class varnishDump:
 		self.logdir   = os.path.dirname(__file__).rstrip('/') + '/log/'
 		self.outproxy = 0
 		self.daemon   = 0
+		self.re_ip4   = re.compile('^(([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$')
 		self.buf      = {}
 		vops = [
 			'-g', 'vxid',
-			#'-g', 'session',
 			'-q', 'Debug:VMD-DUMP',
-			'-i', 'Debug,ReqStart,End,Timestamp,SessOpen'
+			'-i', 'Debug,End,Timestamp'
 		]
+		#reqstartを削って-IでIPとってく
 		arg = {}
 		for o,a in opts:
 			if   o == '-o':
@@ -54,6 +55,14 @@ class varnishDump:
 			if d[v]['raw']:
 				fname = "%s%s_%s.dump" % (self.logdir , tf , v)
 				f = open(fname, 'w')
+				if v == 'req' and self.outproxy:
+					px = 'PROXY'
+					if self.re_ip4.match(d['client-addr']):
+						px = px + ' TCP4'
+					else:
+						px = px + ' TCP6'
+					px = "%s %s %s %s %s\r\n" % (px , d['client-addr'], d['server-addr'], d['client-port'], d['server-port'])
+					f.write(px)
 				f.write(d[v]['raw'])
 				f.close()
 				if not self.daemon:
@@ -73,8 +82,10 @@ class varnishDump:
 
 		if   t_tag == 'Timestamp' and data[:4] == 'Req:' :
 			self.buf[vxid] = {
-				'addr' : None,
-				'port' : None,
+				'client-addr' : None,
+				'client-port' : None,
+				'server-addr' : None,
+				'server-port' : None,
 				'time' : None,
 				'req'  : {'val':'','raw':''},
 				'resp' : {'val':'','raw':''},
@@ -82,16 +93,6 @@ class varnishDump:
 				}
 			spl   = data[:length-1].split(' ',3)
 			self.buf[vxid]['time'] = time.strftime("%Y%m%d-%H%M%S", datetime.datetime.fromtimestamp(float(spl[1])).timetuple())
-		elif t_tag == 'SessOpen':
-			pass
-		#	#        14 SessOpen       c ::1 37408 :6081 ::1 6081 1450161303.625217 15
-		#	#                            remoteIP  Listen    
-		#	#                                remotePort  localip
-		#	print data[:length-1]
-		elif t_tag == 'ReqStart':
-			spl   = data[:length-1].split(' ')
-			self.buf[vxid]['addr'] = spl[0]
-			self.buf[vxid]['port'] = spl[1]
 		elif t_tag == 'End':
 			#Flush
 			self.prnData(vxid)
@@ -107,6 +108,12 @@ class varnishDump:
 						self.buf[vxid]['cur'] = None
 				elif data[:10] == "VMD-DUMP-V":
 					self.buf[vxid][self.buf[vxid]['cur']]['val'] = self.buf[vxid][self.buf[vxid]['cur']]['val'] + data[12:length-1]
+				elif data[:10] == "VMD-DUMP-I":
+					spl =  data[12:length-1].split(' ')
+					self.buf[vxid]['client-addr'] = spl[0]
+					self.buf[vxid]['client-port'] = spl[1]
+					self.buf[vxid]['server-addr'] = spl[2]
+					self.buf[vxid]['server-port'] = spl[3]
 				else:
 					self.buf[vxid][self.buf[vxid]['cur']]['raw'] = self.buf[vxid][self.buf[vxid]['cur']]['raw'] + data[10:length-1]
 					
