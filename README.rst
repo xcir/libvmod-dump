@@ -7,7 +7,7 @@ Dump the header with body
 ------------------------------------
 
 :Author: Shohei Tanaka(@xcir)
-:Date: 2015-12-11
+:Date: 2015-12-16
 :Version: develop-varnish41
 :Support Varnish Version: 4.1.x
 :Manual section: 3
@@ -20,9 +20,7 @@ import dump;
 DESCRIPTION
 ===========
 
-Example Varnish vmod demonstrating how to write an out-of-tree Varnish vmod.
-
-Implements the traditional Hello World as a vmod.
+Header and body output to the VSL.
 
 FUNCTIONS
 =========
