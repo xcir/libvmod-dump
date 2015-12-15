@@ -3,6 +3,9 @@
 
 #include "vcl.h"
 #include "vrt.h"
+#include "vrt_obj.h"
+#include <sys/socket.h>
+#include "vsa.h"
 #include "cache/cache.h"
 #include "cache/cache_filter.h"
 
@@ -135,8 +138,24 @@ vmod_req(VRT_CTX, VCL_STRING val)
 		VSLb(ctx->vsl, SLT_Error,"vmod-dump: dump.req work only at client-thread.");
 		return;
 	}
-	
+	//remote client local server
+	//VRT_r_remote_ip
+	//VRT_r_client_ip
+	//VRT_r_local_ip
+	//VRT_r_server_ip
+	//VRT_IP_string(IP) ip->str
+	//VSA_Port(IP) ip->port
 	VSLb(ctx->vsl, SLT_Debug,"%s-S: REQ", VMOD_DUMP_PRE);
+	VSLb(ctx->vsl, SLT_Debug,"%s-I: %s %d %s %d %s %d %s %d", VMOD_DUMP_PRE,
+		VRT_IP_string(ctx, VRT_r_remote_ip(ctx)),
+		VSA_Port(VRT_r_remote_ip(ctx)),
+		VRT_IP_string(ctx, VRT_r_client_ip(ctx)),
+		VSA_Port(VRT_r_client_ip(ctx)),
+		VRT_IP_string(ctx, VRT_r_local_ip(ctx)),
+		VSA_Port(VRT_r_local_ip(ctx)),
+		VRT_IP_string(ctx, VRT_r_server_ip(ctx)),
+		VSA_Port(VRT_r_server_ip(ctx))
+	);
 	VSLb(ctx->vsl, SLT_Debug,"%s-V: %s", VMOD_DUMP_PRE, val);
 	unsigned u;
 	//reserve work-space
