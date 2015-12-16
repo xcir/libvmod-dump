@@ -127,7 +127,7 @@ Example
                 sub vcl_deliver {
                   if(dump.elapsed() > 3s && req.esi_level==0){
                     //Dump the slow request.
-                    dump.resp("slow request.");
+                    dump.req("slow request.");
                     dump.resp("slow request.");
                   }
                 }
