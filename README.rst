@@ -122,7 +122,13 @@ Description
 Example
         ::
 
+                vcl 4.0;
+                import std;
                 import dump;
+                
+                sub vcl_recv {
+                  std.cache_req_body(1MB);
+                }
                 
                 sub vcl_deliver {
                   if(dump.elapsed() > 3s && req.esi_level==0){
