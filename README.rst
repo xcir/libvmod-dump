@@ -2,9 +2,9 @@
 vmod_dump
 ============
 
-------------------------------------
-Dump the header with body
-------------------------------------
+----------------------------------------------------------------
+Request / Response header and body output to the VSL or file.
+----------------------------------------------------------------
 
 :Author: Shohei Tanaka(@xcir)
 :Date: 2015-12-16
@@ -20,7 +20,7 @@ import dump;
 DESCRIPTION
 ===========
 
-Header and body output to the VSL.
+Request / Response header and body output to the VSL or file.
 
 FUNCTIONS
 =========

@@ -18,7 +18,7 @@ if __name__ == '__main__':
 		opts,args = getopt.getopt(sys.argv[1:],"po:Dn:P:V",["sopath="])
 	except getopt.GetoptError:
 		print 'invalid option'
-		print 'usage: varnishhoststat -p -o [logdir] --sopath [libvarnishapi.so] -D -n [instance-name] -P [pid-file] -V'
+		print 'usage: varnishdump.py -p -o [logdir] --sopath [libvarnishapi.so] -D -n [instance-name] -P [pid-file] -V'
 		sys.exit(2)
 	
 	d_flag = False
