@@ -94,19 +94,21 @@ Example
                 
                 //Output sample.( curl -F 'file=@LICENSE' http://localhost:6081/ )
                 //# varnishlog -qdebug:VMD-DUMP -graw
-                //        21 Debug          c "VMD-DUMP: HTTP/1.1 "
-                //        21 Debug          c "VMD-DUMP: 503 "
-                //        21 Debug          c "VMD-DUMP: Backend fetch failed%0d%0a"
-                //        21 Debug          c "VMD-DUMP: Date: Tue, 15 Dec 2015 07:27:23 GMT%0d%0a"
-                //        21 Debug          c "VMD-DUMP: Server: Varnish%0d%0a"
-                //        21 Debug          c "VMD-DUMP: Content-Type: text/html; charset=utf-8%0d%0a"
-                //        21 Debug          c "VMD-DUMP: Retry-After: 5%0d%0a"
-                //        21 Debug          c "VMD-DUMP: X-Varnish: 21%0d%0a"
-                //        21 Debug          c "VMD-DUMP: Age: 0%0d%0a"
-                //        21 Debug          c "VMD-DUMP: Via: 1.1 varnish-v4%0d%0a"
-                //        21 Debug          c "VMD-DUMP: %0d%0a"
-                //        21 Debug          c "VMD-DUMP: <!DOCTYPE html>%0a<html>%0a  <head>%0a    <title>503 Backend fetch failed</title>%0a  </head>%0a  <body>%0a    <h1>Error 503 Backend fetch failed</h1>%0a    <p>Backend fetch failed</p>%0a    <h3>Guru Meditation:</h3>%0a    <p>XID: 22</p>%0a    <hr>%0a    "
-                //        21 Debug          c "VMD-DUMP: <p>Varnish cache server</p>%0a  </body>%0a</html>%0a"
+                //         5 Debug          c "VMD-DUMP: HTTP/1.1 "
+                //         5 Debug          c "VMD-DUMP: 503 "
+                //         5 Debug          c "VMD-DUMP: Backend fetch failed%0d%0a"
+                //         5 Debug          c "VMD-DUMP: Date: Wed, 16 Dec 2015 18:56:07 GMT%0d%0a"
+                //         5 Debug          c "VMD-DUMP: Server: Varnish%0d%0a"
+                //         5 Debug          c "VMD-DUMP: Content-Type: text/html; charset=utf-8%0d%0a"
+                //         5 Debug          c "VMD-DUMP: Retry-After: 5%0d%0a"
+                //         5 Debug          c "VMD-DUMP: X-Varnish: 5%0d%0a"
+                //         5 Debug          c "VMD-DUMP: Age: 0%0d%0a"
+                //         5 Debug          c "VMD-DUMP: Via: 1.1 varnish-v4%0d%0a"
+                //         5 Debug          c "VMD-DUMP: Content-Length: 278%0d%0a"
+                //         5 Debug          c "VMD-DUMP: Connection: keep-alive%0d%0a"
+                //         5 Debug          c "VMD-DUMP: %0d%0a"
+                //         5 Debug          c "VMD-DUMP: <!DOCTYPE html>%0a<html>%0a  <head>%0a    <title>503 Backend fetch failed</title>%0a  </head>%0a  <body>%0a    <h1>Error 503 Backend fetch failed</h1>%0a    <p>Backend fetch failed</p>%0a    <h3>Guru Meditation:</h3>%0a    <p>XID: 6</p>%0a    <hr>%0a    <"
+                //         5 Debug          c "VMD-DUMP: p>Varnish cache server</p>%0a  </body>%0a</html>%0a"
 
 elapsed
 --------
