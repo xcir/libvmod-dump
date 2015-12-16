@@ -108,6 +108,30 @@ Example
                 //        21 Debug          c "VMD-DUMP: <!DOCTYPE html>%0a<html>%0a  <head>%0a    <title>503 Backend fetch failed</title>%0a  </head>%0a  <body>%0a    <h1>Error 503 Backend fetch failed</h1>%0a    <p>Backend fetch failed</p>%0a    <h3>Guru Meditation:</h3>%0a    <p>XID: 22</p>%0a    <hr>%0a    "
                 //        21 Debug          c "VMD-DUMP: <p>Varnish cache server</p>%0a  </body>%0a</html>%0a"
 
+elapsed
+--------
+
+Prototype
+        ::
+
+                DURATION elapsed()
+Return value
+	DURATION elapsed time
+Description
+	Return elapsed time from the start of task.
+Example
+        ::
+
+                import dump;
+                
+                sub vcl_deliver {
+                  if(dump.elapsed() > 3s && req.esi_level==0){
+                    //Dump the slow request.
+                    dump.resp("slow request.");
+                    dump.resp("slow request.");
+                  }
+                }
+
 TOOLS
 =========
 

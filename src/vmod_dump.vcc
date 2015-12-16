@@ -23,5 +23,7 @@ $Function VOID req(STRING val="")
 
 $Function VOID resp(STRING val="")
 
+$Function DURATION elapsed()
+
 The different functions provided by the VMOD should also have their own
 embedded documentation. This section is for the hello() function.

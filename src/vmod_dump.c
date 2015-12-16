@@ -8,6 +8,7 @@
 #include "vsa.h"
 #include "cache/cache.h"
 #include "cache/cache_filter.h"
+#include "vtim.h"
 
 #include "vcc_if.h"
 
@@ -155,6 +156,7 @@ vmod_req(VRT_CTX, VCL_STRING val)
 	VSLb(ctx->vsl, SLT_Debug,"%s-V: %s", VMOD_DUMP_PRE, val);
 	unsigned u;
 	//reserve work-space
+
 	u = WS_Reserve(ctx->req->ws, 0);
 	if(u <= VMOD_DUMP_KEY_LEN) {
 		//no space.
@@ -214,4 +216,23 @@ vmod_resp(VRT_CTX, VCL_STRING val)
 		VSA_Port(VRT_r_server_ip(ctx))
 	);
 	VDP_push(ctx->req, VDP_dump, (void*)val, 1);
+}
+
+VCL_DURATION
+vmod_elapsed(VRT_CTX)
+{
+	//thread check
+	if(ctx->req == NULL || ctx->req->magic != REQ_MAGIC){
+		//bg-thread
+		if (isnan(ctx->bo->t_first) || ctx->bo->t_first == 0.)
+			return(0.);
+		
+		return(VTIM_real() - ctx->bo->t_first);
+	}else{
+		//cl-thread
+		if (isnan(ctx->req->t_first) || ctx->req->t_first == 0.)
+			return(0.);
+		
+		return(VTIM_real() - ctx->req->t_first);
+	}
 }
