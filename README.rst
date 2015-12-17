@@ -328,13 +328,7 @@ COMMON PROBLEMS
 HISTORY
 ===========
 
-Version 0.4-varnish40: Support Varnish4.0.x
-
-Version 0.3-varnish30: Support V4 Signature. Delete method for v1 signature.
-
-Version 0.2-varnish30: add s3_generic_iam() [pullreq #1 Thanks RevaxZnarf]
-
-Version 0.1-varnish30: add s3_generic() , lf() method
+Version 0.1-varnish40: Initial
 
 COPYRIGHT
 =============
