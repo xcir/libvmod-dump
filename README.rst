@@ -147,46 +147,49 @@ varnishdump
 ----------------
 
 Description
+^^^^^^^^^^^^^
 	Write the dump data to file.
 
 OPTION
+^^^^^^^^^^^^
         ::
 
          -p -o [logdir] --sopath [libvarnishapi.so] -D -n [instance-name] -P [pid-file] -V
 
 -p
-----------------
+""""""""
 Add PROXY Protocol Version1 header for request dump.
 
 -o [logdir]
-----------------
+""""""""""""""""
 Sets logdir.
 
 
 --sopath [libvarnishapi.so]
-------------------
+""""""""""""""""""""""""""""""""
 Specify the libvarnishapi.so path, if you non-standard path.
 
 
 -D
-------------------
+""""""""
 Daemonize.
 
 -P [pid-file]
-------------------
+""""""""
 Write the process's PID to the specified file.(require -D option)
 
 
 -n [instance-name]
---------------------------------
+""""""""""""""""""""""""
 Select which named Varnishd instance to use in multi-instance set-ups. (See -n for varnishstat, etc)
 
 
 -V
---------------------------------
+""""""""
 Show version info.
 
 Example(dump.req("hogehoge"))
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         ::
 
          xcir@varnish41-1:~/ex/libvmod-dump/tools$ sudo ./varnishdump.py
@@ -226,6 +229,7 @@ Example(dump.req("hogehoge"))
          --------------------------c72d24d105d8f2d7--
 
 Example(dump.resp("magemage"))
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         ::
 
          xcir@varnish41-1:~/ex/libvmod-dump/tools$ sudo ./varnishdump.py
@@ -256,6 +260,7 @@ Example(dump.resp("magemage"))
          </html>
 
 Performs reproduction test using the dump file(req)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         ::
 
          xcir@varnish41-1:~/ex/libvmod-dump/tools/log$ cat 20151215-164657_32791_req.dump | nc localhost 6081
