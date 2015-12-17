@@ -7,8 +7,8 @@ Request / Response header and body output to the VSL or file.
 ----------------------------------------------------------------
 
 :Author: Shohei Tanaka(@xcir)
-:Date: 2015-12-16
-:Version: develop-varnish41
+:Date: 2015-12-17
+:Version: 0.1-varnish41
 :Support Varnish Version: 4.1.x
 :Manual section: 3
 
@@ -321,3 +321,29 @@ COMMON PROBLEMS
 
   Make sure you build this vmod against its correspondent Varnish Cache version.
   For dump, to build against Varnish Cache 4.0, this vmod must be built from branch 4.0.
+
+
+
+
+HISTORY
+===========
+
+Version 0.4-varnish40: Support Varnish4.0.x
+
+Version 0.3-varnish30: Support V4 Signature. Delete method for v1 signature.
+
+Version 0.2-varnish30: add s3_generic_iam() [pullreq #1 Thanks RevaxZnarf]
+
+Version 0.1-varnish30: add s3_generic() , lf() method
+
+COPYRIGHT
+=============
+
+This document is licensed under the same license as the
+libvmod-dump project. See LICENSE for details.
+
+* Copyright (c) 2015 Shohei Tanaka(@xcir)
+
+File layout and configuration based on libvmod-example
+
+* Copyright (c) 2011 Varnish Software AS
